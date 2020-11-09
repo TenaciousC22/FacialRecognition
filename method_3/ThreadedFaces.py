@@ -11,7 +11,7 @@ import dlib
 import time
 
 def putIterationsPerSec(frame,iterations_per_sec):
-	cv2.putText(frame, "{:.0f} IpS".format(iterations_per_sec),
+	cv2.putText(frame, "{:.0f} FPS".format(iterations_per_sec),
 		(10,450),cv2.FONT_HERSHEY_SIMPLEX, 1.0,(255,255,255))
 	return frame
 
@@ -70,17 +70,13 @@ def threadBoth(source=0):
 			video_getter.stop()
 			break
 
+		#Grab a new frame from the designated camera and perform the desired functions on it
 		frame=video_getter.frame
-		"""frame=imutils.resize(frame, width=1000)
-		gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-		rects=detector(gray,0)
-		for rect in rects:
-			shape=predictor(gray,rect)
-			shape=face_utils.shape_to_np(shape)
-			for (x,y) in shape:
-				cv2.circle(frame,(x,y),2,(0,0,255),-1)"""
+		#Put the interations per second value on the frame
 		frame=putIterationsPerSec(frame, cps.countsPerSec())
+		#Show the new frame
 		video_shower.frame=frame
+		#Increment and wait so that it doesn't run at 2000 fps
 		cps.increment()
 		time.sleep(0.001)
 
